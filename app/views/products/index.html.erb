@@ -1,0 +1,51 @@
+
+<a href="/users/<%= session[:user_id] %>">Go to Dashboard</a>
+<h3>Hi <%= session[:user] %></h3>
+
+<h4>All products</h4>
+<hr>
+<table>
+  <tr>
+    <td>Product:</td>
+    <td></td>
+    <td></td>
+    <td>Seller</td>
+    <td></td>
+    <td></td>
+    <td>Date Posted</td>
+    <td></td>
+    <td></td>
+    <td>Amount</td>
+    <td></td>
+    <td></td>
+    <td>Action</td>
+  </tr>
+  <% if @products %>
+    <% @products.each do |product| %>
+      <% if product.sold == false %>
+        <tr>
+          <td><%= product.name %></td>
+          <td></td>
+          <td></td>
+          <td><%= product.user.first_name + ' ' + product.user.last_name %></td>
+          <td></td>
+          <td></td>
+          <td><%= product.created_at.strftime("%B %d, %Y") %></td>
+          <td></td>
+          <td></td>
+          <td><%= number_to_currency product.amount %></td>
+          <td></td>
+          <td></td>
+          <td>
+            <form action="/purchases" method="post">
+              <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+              <input type="hidden" name="product" value="<%= product.id %>">
+              <input type="hidden" name="seller" value="<%= product.user_id %>">
+              <button>Buy</button>
+            </form>
+          </td>
+        </tr>
+      <% end %>
+    <% end %>
+  <% end %>
+</table>

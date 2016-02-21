@@ -1,0 +1,49 @@
+<fieldset>
+  <legend>Register</legend>
+  <form action="/users" method="post">
+    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+    <table>
+      <tr>
+        <td>First Name:</td>
+        <td><input type="text" name="user[first_name]"></td>
+      </tr>
+      <tr>
+        <td>Last Name:</td>
+        <td><input type="text" name="user[last_name]"></td>
+      </tr>
+      <tr>
+        <td>Email:</td>
+        <td><input type="text" name="user[email]"></td>
+      </tr>
+      <tr>
+      <tr>
+        <td>Password:</td>
+        <td><input type="password" name="user[password]"></td>
+      </tr>
+      <tr>
+        <td>Confirm Password:</td>
+        <td><input type="password" name="user[password_confirmation]"></td>
+      </tr>
+    </table>
+    <button>Register</button>
+  </form>
+</fieldset>
+
+
+<fieldset>
+  <legend>Login</legend>
+  <form action="/sessions" method="post">
+    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+    <table>
+      <tr>
+        <td>Email:</td>
+        <td><input type="text" name="email"></td>
+      </tr>
+      <tr>
+        <td>Password:</td>
+        <td><input type="password" name="password"></td>
+      </tr>
+    </table>
+    <button>Login</button>
+  </form>
+</fieldset>

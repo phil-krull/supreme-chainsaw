@@ -1,0 +1,148 @@
+
+<a href="/products">Go to All Products</a>
+<h3>Hi <%= session[:user] %></h3>
+
+  <h4>Sell Product</h4>
+  <form action="/products" method="post">
+    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+    <table>
+      <tr>
+        <td>Name:</td>
+        <td><input type="text" name="product[name]"></td>
+      </tr>
+      <tr>
+        <td>Amount:</td>
+        <td><input type="text" name="product[amount]"></td>
+      </tr>
+    </table>
+    <button>Sell</button>
+  </form>
+  <hr>
+  <h4>Your products that are not yet sold:</h4>
+    <table>
+      <tr>
+        <td>Product:</td>
+        <td></td>
+        <td></td>
+        <td>Date Posted:</td>
+        <td></td>
+        <td></td>
+        <td>Amount:</td>
+        <td></td>
+        <td></td>
+        <td>Action:</td>
+      </tr>
+      <% if @products %>
+        <% @products.each do |product| %>
+          <% if product.sold == false %>
+            <% if product.user_id == session[:user_id] %>
+              <tr>
+                <td><%= product.name %></td>
+                <td></td>
+                <td></td>
+                <td><%= product.created_at.strftime("%B %d, %Y") %></td>
+                <td></td>
+                <td></td>
+                <td><%= number_to_currency product.amount %></td>
+                <td></td>
+                <td></td>
+                <td>
+                  <form action="/products" method="post">
+                    <input type="hidden" name="_method" value="delete">
+                    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+                    <input type="hidden" name="product" value="<%= product.id %>">
+                    <button>Delete Product</button>
+                  </form>
+                </td>
+              </tr>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    </table>
+  <hr>
+  <h4>Sales:</h4>
+    <table>
+      <tr>
+        <td>Product:</td>
+        <td></td>
+        <td></td>
+        <td>Date Posted:</td>
+        <td></td>
+        <td></td>
+        <td>Buyer:</td>
+        <td></td>
+        <td></td>
+        <td>Amount:</td>
+      </tr>
+      <% if @purchases %>
+        <% @purchases.each do |purchase| %>
+          <% if purchase.user_id == session[:user_id] %>
+            <tr>
+              <td><%= purchase.product.name %></td>
+              <td></td>
+              <td></td>
+              <td><%= purchase.created_at.strftime("%B %d, %Y") %></td>
+              <td></td>
+              <td></td>
+              <td><%= purchase.buyer.first_name + ' ' + purchase.buyer.last_name %></td>
+              <td></td>
+              <td></td>
+              <td><%= number_to_currency purchase.product.amount %></td>
+            </tr>
+          <% end %>
+        <% end %>
+      <% end %>
+    </table>
+    <% sum1 = 0 %>
+    <% @purchases.each do |purchase| %>
+      <% if purchase.user_id == session[:user_id] %>
+        <p><% sum1 += purchase.product.amount %></p>
+      <% end %>
+    <% end %>
+    <h4>Total: <%= number_to_currency sum1 %></h4>
+  <hr>
+  <h4>Purchases:</h4>
+    <table>
+      <tr>
+        <td>Product:</td>
+        <td></td>
+        <td></td>
+        <td>Date Bought:</td>
+        <td></td>
+        <td></td>
+        <td>Seller:</td>
+        <td></td>
+        <td></td>
+        <td>Amount:</td>
+      </tr>
+      <% if @purchases %>
+        <% @purchases.each do |purchase| %>
+          <% if purchase.buyer.id == session[:user_id] %>
+            <tr>
+              <td><%= purchase.product.name %></td>
+              <td></td>
+              <td></td>
+              <td><%= purchase.created_at.strftime("%B %d, %Y") %></td>
+              <td></td>
+              <td></td>
+              <td><%= purchase.user.first_name + ' ' + purchase.user.last_name %></td>
+              <td></td>
+              <td></td>
+              <td><%= number_to_currency purchase.product.amount %></td>
+            </tr>
+          <% end %>
+        <% end %>
+      <% end %>
+    </table>
+    <% sum2 = 0 %>
+    <% @purchases.each do |purchase| %>
+      <% if purchase.buyer.id == session[:user_id] %>
+        <p><% sum2 += purchase.product.amount %></p>
+      <% end %>
+    <% end %>
+    <h4>Total: <%= number_to_currency sum2 %></h4>
+
+
+
+
